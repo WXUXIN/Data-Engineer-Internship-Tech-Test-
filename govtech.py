@@ -20,6 +20,7 @@ import pandas as pd
 #     "cuisines": ["string", "string"]
 # }
 
+countries = pd.read_excel('Country-Code.xlsx')
 
 with open('restaurant_data.json', 'r') as file:
     main_data = json.load(file)
@@ -61,11 +62,28 @@ for outer_dict in main_data:
         main_rest_lst.append(rest_dict)
 
 # Convert the list of dictionaries to a Pandas DataFrame
-df = pd.DataFrame(main_rest_lst)
+main_df = pd.DataFrame(main_rest_lst)
+
+# I want to merge countries witht the DataFrame, using the country_id as the key
+main_df = pd.merge(main_df, countries, how='left', left_on='Country', right_on='Country Code')
+main_df = main_df.drop(['Country_x', 'Country Code'], axis=1)
+# Rename the column to Country
+main_df = main_df.rename(columns={'Country_y': 'Country'})
+
+# Reorder the columns
+main_df = main_df[[
+    'Restaurant Id',
+    'Restaurant Name',
+    'Country',
+    'City',
+    'User Rating Votes',
+    'User Aggregate Rating',
+    'Cuisines'
+]]
 
 # Save the DataFrame to an Excel file
 file_name = "restaurants.xlsx"
-df.to_excel(file_name, index=False)
+main_df.to_excel(file_name, index=False)
 
 print(f"Data saved to {file_name}")
 
