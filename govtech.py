@@ -106,6 +106,7 @@ for outer_dict in main_data:
                   # For demonstration purposes, I've added a placeholder restaurant name,
                   # but you'll need to extract this from the actual data structure.
                   "Restaurant Id": rest_data.get('R', {}).get('res_id', 'NA'),
+                  "Restaurant Name": rest_data.get('name', 'NA'),
                   "Photo URL": photo_urls,
                   "Event Title": event["title"],
                   "Event Start Date": event["start_date"],
@@ -114,13 +115,11 @@ for outer_dict in main_data:
               
               rest_with_event_lst.append(event_info)
             
-
-
-
-
 # Convert the list of dictionaries to a Pandas DataFrame
 main_df = pd.DataFrame(main_rest_lst)
 rest_with_event_lst = pd.DataFrame(rest_with_event_lst)
+
+# Explode the Photo URL column so that each row contains only one URL
 rest_with_event_lst_exploded = rest_with_event_lst.explode('Photo URL').reset_index(drop=True)
 
 # I want to merge countries witht the DataFrame, using the country_id as the key
@@ -141,10 +140,9 @@ main_df = main_df[[
 ]]
 
 # Save the DataFrame to an Excel file
-file_name = "restaurants.xlsx"
-main_df.to_excel(file_name, index=False)
-rest_with_event_lst_exploded.to_excel("restaurant_events.xlsx", index=False)
+main_df.to_csv('restaurants.csv', index=False)
+rest_with_event_lst_exploded.to_csv('restaurant_events.csv', index=False)
 
-print(f"Data saved to {file_name}")
+print("Data saved!")
 
         
