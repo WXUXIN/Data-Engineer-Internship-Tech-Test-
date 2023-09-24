@@ -23,7 +23,6 @@ Make sure you have `restaurant_data.json` and `Country-Code.xlsx` in the main di
 ### **Run the Code:**
 python govtech.py
 
-	---
 ## Cloud Deployment and Design
 **Design & Deployment:**
 A cloud-based solution, ideally on AWS, can streamline this process:
