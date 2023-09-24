@@ -24,14 +24,16 @@ Make sure you have `restaurant_data.json` and `Country-Code.xlsx` in the main di
 python govtech.py
 
 ## Cloud Deployment and Design
-**Design & Deployment:**
+#### **Design & Deployment:**
+
 We use three main AWS services: Amazon S3, AWS Lambda, and Amazon RDS. We store both the raw and processed data in Amazon S3 because it's reliable and easy to work with. When a new file is uploaded to S3, AWS Lambda automatically processes it due to a set trigger. This setup is both scalable and cost-effective, as you only pay for the time Lambda runs. After processing, the data goes into Amazon RDS, which is a database service made for easy data access.
 
 To set this up, first create an S3 bucket to hold your raw data and set it to notify Lambda when new data comes in. Next, set up AWS Lambda, making sure it can access both S3 and RDS. After you've set the rules for how Lambda should process the data, create an RDS database and make sure Lambda can save data to it. The whole process starts when you upload data to S3, which then gets processed by Lambda, and finally stored in RDS for future access.
 
 
 
-**Decisions & Considerations:**
+#### **Decisions & Considerations:**
+
 We chose AWS Lambda because it works automatically when data is added to S3. This approach is simple, scales as needed, and is cost-effective since you only pay for what you use. For the kind of data we have, Lambda is a good choice.
 
 For storing our data, we picked Amazon RDS because our data is organized and RDS is made for that kind of data. RDS is easy to scale, flexible, and secure. It makes sure the data is saved in a way that's easy to access later. It also has features like automatic backups and strong security.
