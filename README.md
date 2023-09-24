@@ -1,7 +1,7 @@
 # README
 
 ## Instructions on How to Run the Source Code Locally
-#### **Dependencies:**
+1. #### **Dependencies:**
 
 Before you start, ensure that you have the following installed:
 
@@ -11,16 +11,16 @@ pandas: `pip install pandas`<br>
 
 xlrd: `pip install xlrd` (required for reading Excel files with pandas)
 
-#### **Clone the Repository:** 
+2. #### **Clone the Repository:** 
 
 git clone https://github.com/WXUXIN/Data-Engineer-Internship-Tech-Test-.git
 
 cd https://github.com/WXUXIN/Data-Engineer-Internship-Tech-Test-.git
 
-#### **Place Data Files in Directory:**
+3. #### **Place Data Files in Directory:**
 Make sure you have `restaurant_data.json` and `Country-Code.xlsx` in the main directory (or adjust the paths in the code accordingly).
 
-#### **Run the Code:**
+4. #### **Run the Code:**
 python govtech.py
 
 ## Cloud Deployment and Design
