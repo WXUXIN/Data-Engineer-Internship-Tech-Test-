@@ -45,3 +45,5 @@ Thinking about the future, we designed everything to handle more data or more re
 Cost was also important to us. By using services like Lambda, we only pay for what we actually use, which saves money.
 
 In short, our setup is made to handle our restaurant data in a reliable, scalable, and cost-effective way, showing how using cloud services can make data tasks easier.
+
+![image](/Users/ben/Downloads/File upload.png)
