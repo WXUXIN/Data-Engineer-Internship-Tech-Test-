@@ -12,13 +12,14 @@ import datetime
 
 # I will have a list containing dictionaries of restaurants with a structure like this:
 
-# rest_id : {
-#     "name": "string",
-#     "country": "string",
-#     "city": "string",
-#     "user_rating_votes": "string",
-#     "user_aggregate_rating": "string",
-#     "cuisines": ["string", "string"]
+# rest_dict : {
+#     "Restaurant Id": "string",
+#     "Restaurant Name": "string",
+#     "Country": "string",
+#     "City": "string",
+#     "User Rating Votes": "string",
+#     "User Aggregate Rating": "string",
+#     "Cuisines": "string"
 # }
 
 #       Event Id
@@ -37,6 +38,7 @@ with open('restaurant_data.json', 'r') as file:
 
 main_rest_lst = []
 rest_with_event_lst = []
+rating_list = []
 
 for outer_dict in main_data:
     
@@ -114,13 +116,24 @@ for outer_dict in main_data:
               }
               
               rest_with_event_lst.append(event_info)
+
+        rating_data = rest_data.get('user_rating', {})
+        rating_text = rating_data.get('rating_text', 'NA')
+        aggregate_rating = float(rating_data.get('aggregate_rating', 'NA'))
+        rating_list.append({
+            'Restaurant Name': rest_data.get('name', 'NA'),
+            'Rating Text': rating_text,
+            'User Aggregate Rating': aggregate_rating
+        })
             
 # Convert the list of dictionaries to a Pandas DataFrame
 main_df = pd.DataFrame(main_rest_lst)
-rest_with_event_lst = pd.DataFrame(rest_with_event_lst)
+rest_with_event_df = pd.DataFrame(rest_with_event_lst)
+rating_df = pd.DataFrame(rating_list)
+
 
 # Explode the Photo URL column so that each row contains only one URL
-rest_with_event_lst_exploded = rest_with_event_lst.explode('Photo URL').reset_index(drop=True)
+rest_with_event_df_exploded = rest_with_event_df.explode('Photo URL').reset_index(drop=True)
 
 # I want to merge countries witht the DataFrame, using the country_id as the key
 main_df = pd.merge(main_df, countries, how='left', left_on='Country', right_on='Country Code')
@@ -139,9 +152,26 @@ main_df = main_df[[
     'Cuisines'
 ]]
 
+
 # Save the DataFrame to an Excel file
 main_df.to_csv('restaurants.csv', index=False)
-rest_with_event_lst_exploded.to_csv('restaurant_events.csv', index=False)
+rest_with_event_df.to_csv('restaurant_events.csv', index=False)
+
+# Filter only required ratings
+required_ratings = ['Excellent', 'Very Good', 'Good', 'Average', 'Poor']
+rating_df = rating_df[rating_df['Rating Text'].isin(required_ratings)]
+
+# Drop rows without User Aggregate Rating
+rating_df = rating_df[rating_df['User Aggregate Rating'] != 'NA']
+
+# Group by Rating Text and then get the minimum and maximum of User Aggregate Rating for each group
+grouped = rating_df.groupby('Rating Text')['User Aggregate Rating'].agg(['min', 'max'])
+
+# Sort by the minimum User Aggregate Rating
+grouped = grouped.sort_values(by='min', ascending=False)
+
+print("\nThreshold for the different rating text: \n")
+print(f"{grouped} \n")
 
 print("Data saved!")
 
