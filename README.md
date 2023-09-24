@@ -25,21 +25,21 @@ python govtech.py
 
 ## Cloud Deployment and Design
 **Design & Deployment:**
-A cloud-based solution, ideally on AWS, can streamline this process:
+We use three main AWS services: Amazon S3, AWS Lambda, and Amazon RDS. We store both the raw and processed data in Amazon S3 because it's reliable and easy to work with. When a new file is uploaded to S3, AWS Lambda automatically processes it due to a set trigger. This setup is both scalable and cost-effective, as you only pay for the time Lambda runs. After processing, the data goes into Amazon RDS, which is a database service made for easy data access.
 
-Storage: Use Amazon S3 to store our data files (restaurant_data.json and Country-Code.xlsx) and output files (restaurants.csv and restaurant_events.csv).
+To set this up, first create an S3 bucket to hold your raw data and set it to notify Lambda when new data comes in. Next, set up AWS Lambda, making sure it can access both S3 and RDS. After you've set the rules for how Lambda should process the data, create an RDS database and make sure Lambda can save data to it. The whole process starts when you upload data to S3, which then gets processed by Lambda, and finally stored in RDS for future access.
 
-Processing: Use AWS Lambda with triggered events. Whenever a new restaurant_data.json is uploaded to the S3 bucket, it automatically triggers the Lambda function to process the file.
 
-Data Management: For more extensive querying and analysis, Amazon RDS or Amazon Redshift can be used to store restaurant and event data.
 
 **Decisions & Considerations:**
-Scalability: Lambda functions scale automatically by running code in response to triggers. With S3 and RDS/Redshift, we're also ensuring our storage scales.
+We chose AWS Lambda because it works automatically when data is added to S3. This approach is simple, scales as needed, and is cost-effective since you only pay for what you use. For the kind of data we have, Lambda is a good choice.
 
-Cost: Using AWS Lambda and S3 is cost-effective. You pay only for the compute time and storage you consume.
+For storing our data, we picked Amazon RDS because our data is organized and RDS is made for that kind of data. RDS is easy to scale, flexible, and secure. It makes sure the data is saved in a way that's easy to access later. It also has features like automatic backups and strong security.
 
-Maintenance: Serverless architectures reduce the need for system administration.
+We also made sure to handle any errors that might happen. With AWS Lambda's built-in error checks and S3's notifications, we can quickly know if something goes wrong, keeping our data safe.
 
-Flexibility: The architecture allows integration with other AWS services, like Amazon QuickSight for BI and visualizations.
+Thinking about the future, we designed everything to handle more data or more requests without any issues. Both Lambda and RDS can handle more work if needed, keeping things running smoothly.
 
-Security: Ensure that the S3 buckets are private and only the Lambda function has the IAM role with permissions to access and process the data.
+Cost was also important to us. By using services like Lambda, we only pay for what we actually use, which saves money.
+
+In short, our setup is made to handle our restaurant data in a reliable, scalable, and cost-effective way, showing how using cloud services can make data tasks easier.
