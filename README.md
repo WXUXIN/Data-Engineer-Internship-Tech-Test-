@@ -32,7 +32,7 @@ To set this up, first create an S3 bucket to hold your raw data and set it to no
 
 
 
-#### **<u> Decisions & Considerations:<u> **
+#### ** Decisions & Considerations: **
 
 We chose AWS Lambda because it works automatically when data is added to S3. This approach is simple, scales as needed, and is cost-effective since you only pay for what you use. For the kind of data we have, Lambda is a good choice.
 
