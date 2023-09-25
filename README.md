@@ -1,27 +1,26 @@
 # README
 
 ## Instructions on How to Run the Source Code Locally
-1. ### **Dependencies:**
 
-Before you start, ensure that you have the following installed:
+### 1. **Dependencies**:
+Before running, ensure the following are installed:
+- **Python 3**
+- **pandas**: Run `pip install pandas`
+- **xlrd**: Run `pip install xlrd` (Required for reading Excel files with pandas)
 
-Python 3
-
-pandas: `pip install pandas`<br>
-
-xlrd: `pip install xlrd` (required for reading Excel files with pandas)
-
-2. ### **Clone the Repository:** 
-
+### 2. **Clone the Repository**:
+\```bash
 git clone https://github.com/WXUXIN/Data-Engineer-Internship-Tech-Test-.git
+cd Data-Engineer-Internship-Tech-Test-
+\```
 
-cd https://github.com/WXUXIN/Data-Engineer-Internship-Tech-Test-.git
+### 3. **Place Data Files in Directory**:
+Ensure `restaurant_data.json` and `Country-Code.xlsx` are in the main directory. Adjust paths in the code if placed differently.
 
-3. ### **Place Data Files in Directory:**
-Make sure you have `restaurant_data.json` and `Country-Code.xlsx` in the main directory (or adjust the paths in the code accordingly).
-
-4. ### **Run the Code:**
+### 4. **Run the Code**:
+\```bash
 python govtech.py
+\```
 
 ## Cloud Deployment and Design
 ### **Design & Deployment:**
@@ -71,7 +70,7 @@ Before each test, the script sets up some prerequisites, including file paths to
 
 ---
 
-### **Test Cases:**
+## **Test Cases:**
 
 ---
 
