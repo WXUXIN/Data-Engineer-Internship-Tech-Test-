@@ -69,34 +69,49 @@ Before each test, the script sets up some prerequisites, including file paths to
 2. invalid_country_code.json for the test checking invalid country codes.
 3. empty_photo_url.json for the test verifying the behavior with empty photo URLs.
 
+---
+
 ### **Test Cases:**
-Test Name: test_empty_json
 
-Purpose: This test ensures the system's resilience when encountering an empty JSON dataset.
-
-Expected Outcome: The process_data function should raise an exception when given an empty JSON. This is to ensure the function doesn't process invalid or empty datasets, which could lead to unexpected behaviors or errors later on.
 ---
-Test Name: test_invalid_country_code
 
-Purpose: Evaluates how the function handles restaurants with country codes not present in a predefined list or excel sheet.
+#### **1. `test_empty_json`**
 
-Execution:
-The warnings module captures any warnings thrown during the processing of the dataset.
-The test asserts that a warning has been issued.
+- **Purpose**: 
+  - This test ensures the system's resilience when encountering an empty JSON dataset.
 
-Expected Outcome:
-A warning should be raised by the process_data function when it encounters an invalid country code.
-The warning message should specifically state: "Invalid country code detected!" to ensure clear communication of the issue.
-This allows for graceful degradation; rather than stopping the entire process due to a single entry's invalid country code, the function sends a warning and continues processing.
+- **Expected Outcome**:
+  - The `process_data` function should raise an exception when given an empty JSON. This is to ensure the function doesn't process invalid or empty datasets, which could lead to unexpected behaviors or errors later on.
+
 ---
-Test Name: test_empty_photo_url
 
-Purpose: Ensures that restaurants with missing photo URLs are handled correctly.
+#### **2. `test_invalid_country_code`**
 
-Execution:
-The function processes the dataset.
-The resultant CSV is read to verify how empty photo URLs have been processed.
+- **Purpose**: 
+  - Evaluates how the function handles restaurants with country codes not present in a predefined list or excel sheet.
 
-Expected Outcome:
-Restaurants with missing photo URLs should be included in the output CSV, demonstrating the function's resilience against incomplete data.
-Specifically, there should be 9 such restaurants. This ensures that missing data points aren't simply dropped but are instead filled in (e.g., with 'NA') and retained.
+- **Execution**:
+  - The `warnings` module captures any warnings thrown during the processing of the dataset.
+  - The test asserts that a warning has been issued.
+
+- **Expected Outcome**:
+  - A warning should be raised by the `process_data` function when it encounters an invalid country code.
+  - The warning message should specifically state: "Invalid country code detected!" to ensure clear communication of the issue.
+  - This allows for graceful degradation; rather than stopping the entire process due to a single entry's invalid country code, the function sends a warning and continues processing.
+
+---
+
+#### **3. `test_empty_photo_url`**
+
+- **Purpose**: 
+  - Ensures that restaurants with missing photo URLs are handled correctly.
+
+- **Execution**:
+  - The function processes the dataset.
+  - The resultant CSV is read to verify how empty photo URLs have been processed.
+
+- **Expected Outcome**:
+  - Restaurants with missing photo URLs should be included in the output CSV, demonstrating the function's resilience against incomplete data.
+  - Specifically, there should be 9 such restaurants. This ensures that missing data points aren't simply dropped but are instead filled in (e.g., with 'NA') and retained.
+
+---
