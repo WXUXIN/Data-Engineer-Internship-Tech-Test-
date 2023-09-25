@@ -2,50 +2,90 @@ import unittest
 import os
 import pandas as pd
 from govtech import process_data  # Assuming you saved your script as 'govtech.py'
+import warnings
+
+class CustomTestResult(unittest.TextTestResult):
+
+    # def addSuccess(self, test):
+    #     super().addSuccess(test)
+    #     # Use self.stream.write to print the desired character
+    #     self.stream.write('Passed\n')
+    #     self.stream.flush()
+
+
+    def addSuccess(self, test):
+        if test._testMethodName == "test_empty_json":
+            self.stream.write("Passed Empty JSON Test\n")
+        elif test._testMethodName == "test_invalid_country_code":
+            self.stream.write("Passed Invalid Country Code Test\n")
+        elif test._testMethodName == "test_empty_photo_url":
+            self.stream.write("Passed Empty Photo URL Test\n")
+        else:
+            self.stream.write('Passed\n')
+        self.stream.flush()
+
+    def addFailure(self, test, err):
+        if test._testMethodName == "test_empty_json":
+            self.stream.write("Failed Empty JSON Test\n")
+        elif test._testMethodName == "test_invalid_country_code":
+            self.stream.write("Failed Invalid Country Code Test\n")
+        elif test._testMethodName == "test_empty_photo_url":
+            self.stream.write("Failed Empty Photo URL Test\n")
+        else:
+            self.stream.write("Failed\n")
+        self.stream.flush()
+
+class CustomTestRunner(unittest.TextTestRunner):
+    resultclass = CustomTestResult
 
 class TestRestaurantDataProcessing(unittest.TestCase):
     
     def setUp(self):
         # This will run before each test to set up any prerequisites
-        self.sample_json_file = 'sample_restaurant_data.json'
+        self.empty_restaurant_data = 'empty_restaurant_data.json'
+        self.invalid_country_code = 'invalid_country_code.json'
+        self.empty_photo_url = 'empty_photo_url.json'
 
-    def test_rows_in_csv(self):
-        # Assuming you have a 'sample_restaurant_data.json' with known data
-        process_data()
-        # Read the generated CSV files
-        main_df = pd.read_csv('restaurants.csv')
-        event_df = pd.read_csv('restaurant_events.csv')
+    # def test_rows_in_csv(self):
 
-        # Assert based on your sample data
-        self.assertEqual(len(main_df), 5)  # replace 5 with expected rows based on sample data
-        self.assertEqual(len(event_df), 3)  # replace 3 with expected rows based on sample data
+    #     process_data()
+    #     # Read the generated CSV files
+    #     main_df = pd.read_csv('restaurants.csv')
+    #     event_df = pd.read_csv('restaurant_events.csv')
 
-    def test_empty_json(self):
-        with open(self.sample_json_file, 'w') as file:
-            file.write('{}')
-        
+    #     # Assert based on your sample data
+    #     self.assertEqual(len(main_df), 5)  # replace 5 with expected rows based on sample data
+    #     self.assertEqual(len(event_df), 3)  # replace 3 with expected rows based on sample data
+
+    # No data in the JSON file -> Raise exception       
+    def test_empty_json(self):        
         # You might want to catch exceptions in your main script and return them, to check here.
         with self.assertRaises(Exception):
-            process_data()
+            process_data(self.empty_restaurant_data)
 
-    def test_missing_fields_in_json(self):
+    # If there are restaurants with country code not in the excel sheet provided and their city is not Dummy, raise exception
+    # res_id 18537536
+
+    def test_invalid_country_code(self):
+        with warnings.catch_warnings(record=True) as w:
+            # Trigger a warning.
+            process_data(self.invalid_country_code)
+            # Ensure some warnings were issued.
+            self.assertTrue(len(w) > 0)
+            # Check that the message of the first warning matches your expectation.
+            self.assertEqual(str(w[0].message), "Invalid country code detected!")
+
+    # Empty Photo URLS must be populated with NA, and work as per normal
+    # There are 9 restaurants with events within the month of April with empty photo urls 
+    def test_empty_photo_url(self):
         # You can write a malformed JSON file here similar to how the empty json is written above
-        pass
+        process_data(self.empty_photo_url)
+        main_df = pd.read_csv('restaurant_events.csv')
 
-    def test_incorrect_date_format(self):
-        # Similar to test_missing_fields_in_json, create a JSON with incorrect date format
-        pass
-
-    # This is a rough test, you might want more sophisticated ways to measure performance
-    def test_large_dataset_performance(self):
-        import time
+        # Check that there are 9 restaurants with empty photo urls
+        self.assertEqual(len(main_df[pd.isna(main_df['Photo URL'])]), 9)
         
-        start_time = time.time()
-        process_data()  # Assuming you have a large dataset in place
-        end_time = time.time()
-        
-        # For instance, let's say you want the process to not take more than 60 seconds
-        self.assertLess(end_time - start_time, 60)
-
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(testRunner=CustomTestRunner())
+
+    

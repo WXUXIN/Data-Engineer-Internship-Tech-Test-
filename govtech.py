@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import datetime
+import warnings
 
 # I want to store Restaurant Id
 # ◦   	Restaurant Name
@@ -30,15 +31,21 @@ import datetime
 # ◦   	Event Start Date
 # ◦   	Event End Date
 
-def process_data():
+def process_data(filename='restaurant_data.json'):
     countries = pd.read_excel('Country-Code.xlsx')
 
-    with open('restaurant_data.json', 'r') as file:
+    with open(filename, 'r') as file:
         main_data = json.load(file)
 
     main_rest_lst = []
     rest_with_event_lst = []
     rating_list = []
+
+    # If the JSON file is empty, raise an exception
+    if not main_data:
+        raise Exception("JSON file is empty")
+    
+    # Think of other exceptions that might occur and raise them here
 
     for outer_dict in main_data:
         
@@ -93,15 +100,32 @@ def process_data():
             zomato_events = rest_data.get('zomato_events', [])
 
             for event_data in zomato_events:
-                event = event_data["event"]
-                start_date = datetime.datetime.strptime(event["start_date"], "%Y-%m-%d").date()
-                end_date = datetime.datetime.strptime(event["end_date"], "%Y-%m-%d").date()
+                event = event_data.get('event', {})
                 
+                # If we get an empty event, skip this event
+                if not event:
+                    continue
+
+                start_date = event.get("start_date", None)
+
+                # If we get an empty start date, skip this event
+                if not start_date:
+                    continue
+
+                # This is assuming that the date is in the format YYYY-MM-DD, 
+                start_date = datetime.datetime.strptime(event["start_date"], "%Y-%m-%d").date()
+
                 # Check if the event was active in April 2019
                 if start_date <= datetime.date(2019, 4, 30) and start_date >= datetime.date(2019, 4, 1):
                     
-                    # Extract all photo URLs
-                    photo_urls = [photo["photo"]["url"] for photo in event["photos"]] if event["photos"] else "NA"
+                    # First check is to check if there are any photos
+                    photo_urls = event["photos"] if event["photos"] else "NA"
+
+                    # Second is to check for each photo dictionary, if there is a url key
+                    # If there is, extract the url, else, replace it with NA
+                    if photo_urls != "NA":
+                        photo_urls = [photo["photo"]["url"] if photo.get("photo", {}).get("url", None) else "NA" for photo in event["photos"]]
+                    # [photo["photo"]["url"] for photo in event["photos"]] 
                     
                     event_info = {
                         "Event Id": event["event_id"],
@@ -137,7 +161,13 @@ def process_data():
 
     # I want to merge countries witht the DataFrame, using the country_id as the key
     main_df = pd.merge(main_df, countries, how='left', left_on='Country', right_on='Country Code')
-    main_df = main_df.drop(['Country_x', 'Country Code'], axis=1)
+
+
+    # If there are restaurants with country code not in the excel sheet provided, and city is not dummy, raise exception
+    if main_df[main_df['Country Code'].isna() & (main_df['City'] != 'Dummy')].shape[0] > 0:
+        warnings.warn(f"Invalid country code detected!")
+    
+    # main_df = main_df.dropx(['Country_x', 'Country Code'], axis=1)
     # Rename the column to Country
     main_df = main_df.rename(columns={'Country_y': 'Country'})
 
@@ -152,6 +182,8 @@ def process_data():
         'Cuisines'
     ]]
 
+    # If any value is NA, replace it with 'NA'
+    main_df = main_df.fillna('NA')
 
     # Save the DataFrame to an Excel file
     main_df.to_csv('restaurants.csv', index=False)
@@ -173,7 +205,7 @@ def process_data():
     print("\nThreshold for the different rating text: \n")
     print(f"{grouped} \n")
 
-    print("Data saved!")
+    print("Data saved!\n")
 
 if __name__ == "__main__":
     process_data()
