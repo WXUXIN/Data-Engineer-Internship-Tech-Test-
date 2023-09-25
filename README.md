@@ -9,18 +9,18 @@ Before running, ensure the following are installed:
 - **xlrd**: Run `pip install xlrd` (Required for reading Excel files with pandas)
 
 ### 2. **Clone the Repository**:
-\```bash
+```bash
 git clone https://github.com/WXUXIN/Data-Engineer-Internship-Tech-Test-.git
 cd Data-Engineer-Internship-Tech-Test-
-\```
+```
 
 ### 3. **Place Data Files in Directory**:
 Ensure `restaurant_data.json` and `Country-Code.xlsx` are in the main directory. Adjust paths in the code if placed differently.
 
 ### 4. **Run the Code**:
-\```bash
+```bash
 python govtech.py
-\```
+```
 
 ## Cloud Deployment and Design
 ### **Design & Deployment:**
