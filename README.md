@@ -52,15 +52,18 @@ In short, my setup is made to handle the restaurant data in a reliable, scalable
 
 
 ## Test Script Summary
-Overall, the testing.py script tests how the data processing script, govtech.py handles various edge cases:
 
-1. Empty JSON file
-2. JSON file containing restaraunts with invalid country codes that are not found in the provided Country-Code.xlsx file
-3. Empty Photo URL, where the photo_url of a even's photo is not present
+The `testing.py` script rigorously evaluates the behavior of `govtech.py` by subjecting it to several edge cases. The primary objectives include:
 
-and ensures that the data processing behaves as expected for these cases.
+### Edge Cases Covered:
 
-Setup:
+1. **Empty JSON file**: Determines how the system copes with the absence of data.
+2. **Invalid Country Codes**: Assesses behavior when restaurants have country codes not found in `Country-Code.xlsx`.
+3. **Absent Photo URLs**: Reviews how restaurants with missing photo URLs are processed.
+
+Each test is designed to guarantee that the data processing adapts gracefully to these cases, ensuring data integrity and robust system behavior.
+
+### Setup:
 
 Before each test, the script sets up some prerequisites, including file paths to specific JSON files:
 
