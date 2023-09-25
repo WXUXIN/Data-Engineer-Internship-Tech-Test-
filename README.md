@@ -71,12 +71,7 @@ Before each test, the script sets up some prerequisites, including file paths to
 2. invalid_country_code.json for the test checking invalid country codes.
 3. empty_photo_url.json for the test verifying the behavior with empty photo URLs.
 
----
-
 ## **Test Cases:**
-
----
-
 #### **1. `test_empty_json`**
 
 - **Purpose**: 
