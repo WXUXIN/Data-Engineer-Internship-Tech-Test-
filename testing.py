@@ -46,26 +46,15 @@ class TestRestaurantDataProcessing(unittest.TestCase):
         self.invalid_country_code = 'invalid_country_code.json'
         self.empty_photo_url = 'empty_photo_url.json'
 
-    # def test_rows_in_csv(self):
-
-    #     process_data()
-    #     # Read the generated CSV files
-    #     main_df = pd.read_csv('restaurants.csv')
-    #     event_df = pd.read_csv('restaurant_events.csv')
-
-    #     # Assert based on your sample data
-    #     self.assertEqual(len(main_df), 5)  # replace 5 with expected rows based on sample data
-    #     self.assertEqual(len(event_df), 3)  # replace 3 with expected rows based on sample data
-
-    # No data in the JSON file -> Raise exception       
+    # Evaluates how the function handles restaurants with country codes not present in a predefined list or excel sheet.   
     def test_empty_json(self):        
-        # You might want to catch exceptions in your main script and return them, to check here.
         with self.assertRaises(Exception):
             process_data(self.empty_restaurant_data)
 
     # If there are restaurants with country code not in the excel sheet provided and their city is not Dummy, raise exception
     # res_id 18537536
 
+    # Evaluates how the function handles restaurants with country codes not present in a predefined list or excel sheet.
     def test_invalid_country_code(self):
         with warnings.catch_warnings(record=True) as w:
             # Trigger a warning.

@@ -23,8 +23,11 @@ python govtech.py
 ```
 
 Upon successful execution, the following output files will be generated:
-restaurants.csv: A comprehensive list of restaurants.
-restaurant_events.csv: A detailed list of restaurants that hosted events in April 2019.
+1. restaurants.csv: A comprehensive list of restaurants.
+2. restaurant_events.csv: A list of restaurants that have past event in the month of April 2019. 
+     If the restaraunt has more than 1 photo for the event, each photo URL will be stored in a separate row.
+
+All empty values are populated with "NA"
 
 Additionally, the terminal will display threshold values for the different ratings text:
 min: The lowest aggregate score qualifying for a rating text.
@@ -35,13 +38,13 @@ max: The highest aggregate score that a rating text have.
 1. An event qualifies as a "Past event in April 2019" if its start date is within April, regardless of the end date.
 2. Event dates will always follow the "YYYY-MM-DD" format.
 3. Zomato's country code remains consistent.
-4. 20 restaurants in the city "Dummy" with Country Code 17 are considered anomalies, but they won't be removed to preserve data completeness.
+4. There are 20 restaurants located in the city labeled "Dummy" with the Country Code 17. These entries appear anomalous given that their country code is absent from the valid list in Country-Code.xlsx and the placeholder nature of the city name. Despite their irregularity, these entries will be retained to ensure the integrity and completeness of the dataset.
 
 ### Interpretations:
 1. Keys like "results_found” and “results_start" aren't crucial for restaurant data extraction.
 2. The restaurant's ID is represented as `"R": { "res_id": ... }`.
 3. The "zomato_events" key holds a list of dictionaries detailing all events for a given restaurant.
-4. Events can have multiple associated photos. Each photo will be stored in individual rows in the output CSV.
+4. Events can have multiple associated photos. Each photo will be stored in individual rows in the output restaurant_events.csv.
 
 ## Cloud Deployment and Design
 ### **Design & Deployment:**
@@ -66,7 +69,7 @@ In short, my setup is made to handle the restaurant data in a reliable, scalable
 
 ## Test Script Summary
 
-The `testing.py` script rigorously evaluates the behavior of `govtech.py` by subjecting it to several edge cases. The primary objectives include:
+The `testing.py` script evaluates the behavior of `govtech.py` by subjecting it to several test cases. The primary objectives include:
 
 ### Edge Cases Covered:
 
@@ -78,11 +81,50 @@ Each test is designed to guarantee that the data processing adapts gracefully to
 
 ### Setup:
 
-Before each test, the script sets up some prerequisites, including file paths to specific JSON files:
+Before each test, the script sets up some prerequisites, including file paths to specific JSON files, each containing the first 20 restaurants from the original dataset, except for empty_restaurant_data.json, which is empty.:
 
 1. empty_restaurant_data.json for the test involving an empty JSON.
 2. invalid_country_code.json for the test checking invalid country codes.
 3. empty_photo_url.json for the test verifying the behavior with empty photo URLs.
+
+### **Run the Code**:
+```bash
+python testing.py
+```
+
+### Expected Output:
+
+Upon successful execution of the tests, the following messages will be displayed:
+
+#### Successful Tests:
+
+- **Empty JSON Test**:
+
+  Passed Empty JSON Test
+
+- **Invalid Country Code Test**:
+
+  Passed Invalid Country Code Test
+
+- **Empty Photo URL Test**:
+
+  Passed Empty Photo URL Test
+
+#### Other Tests:
+
+- Passed
+
+#### When a test fails:
+
+- **Empty JSON Test**: "Failed Empty JSON Test"
+
+- **Invalid Country Code Test**: "Failed Invalid Country Code Test"
+
+- **Empty Photo URL Test**: "Failed Empty Photo URL Test"
+
+- Any other unsuccessful test (though not mentioned explicitly in your provided code): 'Failed'
+
+
 
 ## **Test Cases:**
 #### **1. `test_empty_json`**
@@ -101,6 +143,7 @@ Before each test, the script sets up some prerequisites, including file paths to
   - Evaluates how the function handles restaurants with country codes not present in a predefined list or excel sheet.
 
 - **Execution**:
+  - Restaurant with id 18537536 has a country code of 100, which is not present in the list of valid country codes, is used to test the function's behavior.
   - The `warnings` module captures any warnings thrown during the processing of the dataset.
   - The test asserts that a warning has been issued.
 
