@@ -56,7 +56,8 @@ import warnings
 
 
 # For the third task, this is what I would do:
-# Restaurant's event, I want to store:
+#
+# For each Restaurant, I want to store:
 # Restaurant Name
 # Rating Text
 # User Aggregate Rating
