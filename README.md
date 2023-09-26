@@ -98,17 +98,11 @@ Upon successful execution of the tests, the following messages will be displayed
 
 #### Successful Tests:
 
-- **Empty JSON Test**:
+- **Empty JSON Test**: "Passed Empty JSON Test"
 
-  Passed Empty JSON Test
+- **Invalid Country Code Test**: "Passed Invalid Country Code Test"
 
-- **Invalid Country Code Test**:
-
-  Passed Invalid Country Code Test
-
-- **Empty Photo URL Test**:
-
-  Passed Empty Photo URL Test
+- **Empty Photo URL Test**: "Passed Empty Photo URL Test"
 
 #### When a test fails:
 
