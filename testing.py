@@ -20,8 +20,6 @@ class CustomTestResult(unittest.TextTestResult):
             self.stream.write("Passed Invalid Country Code Test\n")
         elif test._testMethodName == "test_empty_photo_url":
             self.stream.write("Passed Empty Photo URL Test\n")
-        else:
-            self.stream.write('Passed\n')
         self.stream.flush()
 
     def addFailure(self, test, err):
@@ -31,8 +29,6 @@ class CustomTestResult(unittest.TextTestResult):
             self.stream.write("Failed Invalid Country Code Test\n")
         elif test._testMethodName == "test_empty_photo_url":
             self.stream.write("Failed Empty Photo URL Test\n")
-        else:
-            self.stream.write("Failed\n")
         self.stream.flush()
 
 class CustomTestRunner(unittest.TextTestRunner):

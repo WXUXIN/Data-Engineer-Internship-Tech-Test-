@@ -110,10 +110,6 @@ Upon successful execution of the tests, the following messages will be displayed
 
   Passed Empty Photo URL Test
 
-#### Other Tests:
-
-- Passed
-
 #### When a test fails:
 
 - **Empty JSON Test**: "Failed Empty JSON Test"
@@ -121,11 +117,6 @@ Upon successful execution of the tests, the following messages will be displayed
 - **Invalid Country Code Test**: "Failed Invalid Country Code Test"
 
 - **Empty Photo URL Test**: "Failed Empty Photo URL Test"
-
-- Any other unsuccessful test (though not mentioned explicitly in your provided code): 'Failed'
-
-
-
 ## **Test Cases:**
 #### **1. `test_empty_json`**
 
