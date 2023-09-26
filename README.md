@@ -83,7 +83,7 @@ Each test is designed to guarantee that the data processing adapts gracefully to
 
 ### Setup:
 
-Before each test, the script sets up some prerequisites, including file paths to specific JSON files, each containing the first 20 restaurants from the original dataset, except for empty_restaurant_data.json, which is empty.:
+Before each test, the script sets up some prerequisites, including file paths to specific JSON files, each containing the first 20 restaurants from the original dataset with the modifications to be tested, except for empty_restaurant_data.json, which is empty. All JSON files are to be in the main directory:
 
 1. empty_restaurant_data.json: For the test involving an empty JSON.
 2. invalid_country_code.json: For the test checking invalid country codes.
