@@ -146,7 +146,7 @@ Upon successful execution of the tests, the following messages will be displayed
 
 - **Execution**:
 
-  - In the modified JSON file invalid_country_code.json, I modified the restaurant with id 18537536 to have an invalid country code of 100, which is not present in the list of valid country codes, is used to test the function's behavior.
+  - In the modified JSON file invalid_country_code.json, I modified the restaurant with id 18537536 to have an invalid country code of 100, which is not present in the list of valid country codes, to test the function's behavior.
   - The `warnings` module captures any warnings thrown during the processing of the dataset.
   - The test asserts that a warning has been issued.
 
