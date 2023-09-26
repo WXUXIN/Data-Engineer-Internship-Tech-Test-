@@ -3,29 +3,35 @@
 ## Instructions on How to Run the Source Code Locally
 
 ### 1. **Dependencies**:
+
 Before running, ensure the following are installed:
+
 - **Python 3**
 - **pandas**: Run `pip install pandas`
 - **xlrd**: Run `pip install xlrd` (Required for reading Excel files with pandas)
 
 ### 2. **Clone the Repository**:
+
 ```bash
 git clone https://github.com/WXUXIN/Data-Engineer-Internship-Tech-Test-.git
 cd Data-Engineer-Internship-Tech-Test-
 ```
 
 ### 3. **Place Data Files in Directory**:
+
 Ensure `restaurant_data.json` and `Country-Code.xlsx` are in the main directory. Adjust paths in the code if placed differently.
 
 ### 4. **Run the Code**:
+
 ```bash
 python govtech.py
 ```
 
 Upon successful execution, the following output files will be generated:
+
 1. restaurants.csv: A comprehensive list of restaurants.
-2. restaurant_events.csv: A list of restaurants that have past event in the month of April 2019. 
-     If the restaraunt has more than 1 photo for the event, each photo URL will be stored in a separate row.
+2. restaurant_events.csv: A list of restaurants that have past event in the month of April 2019.
+   If the restaraunt has more than 1 photo for the event, each photo URL will be stored in a separate row.
 
 All empty values are populated with "NA"
 
@@ -36,24 +42,28 @@ Additionally, the terminal will display threshold values for the different ratin
 - **max**: The highest aggregate score that a rating text have.
 
 ## Assumptions & Interpretations
+
 ### Assumptions:
-1. An event qualifies as a "Past event in April 2019" if the even's start date is within April, regardless of the end date.
+
+1. An event qualifies as a "Past event in April 2019" if the event's start date is within April 2019, regardless of the end date.
 2. Event dates will always follow the "YYYY-MM-DD" format.
 3. Zomato's country code remains consistent.
 4. There are 20 restaurants located in the city labeled "Dummy" with the Country Code 17. These entries appear anomalous given that their country code is absent from the valid list in Country-Code.xlsx and the placeholder nature of the city name. Despite their irregularity, these entries will be retained to ensure the integrity and completeness of the dataset.
 
 ### Interpretations:
+
 1. Keys like "results_found” and “results_start" aren't crucial for restaurant data extraction.
 2. The restaurant's ID is represented as `"R": { "res_id": ... }`.
 3. The "zomato_events" key holds a list of dictionaries detailing all events for a given restaurant.
 4. Events can have multiple associated photos. Each photo will be stored in individual rows in the output restaurant_events.csv.
 
 ## Cloud Deployment and Design
+
 ### **Design & Deployment:**
 
-I will use three main AWS services: Amazon S3, AWS Lambda, and Amazon RDS. I will store both the raw and processed data in Amazon S3 because it's reliable and easy to work with. When a new file is uploaded to S3, AWS Lambda automatically processes it due to a set trigger. This setup is both scalable and cost-effective, as I only pay for the time Lambda runs. After processing, the data goes into Amazon RDS, which is a database service made for easy data access.
+I will use three main AWS services: Amazon S3, AWS Lambda, and Amazon RDS. I will store both the raw data in Amazon S3 because it's reliable and easy to work with. When a new file is uploaded to S3, AWS Lambda automatically processes it due to a set trigger. This setup is both scalable and cost-effective, as I only pay for the time Lambda runs. After processing, the data goes into Amazon RDS, which is a database service made for easy data access.
 
-To set this up, I will first first create an S3 bucket to hold the raw data and set it to notify Lambda when new data comes in. Next, I will set up AWS Lambda, making sure it can access both S3 and RDS. After I've set the rules for how Lambda should process the data, I will create an RDS database and make sure Lambda can save data to it. 
+To set this up, I will first create an S3 bucket. Next, I will set up an AWS Lambda function and establish a trigger and set up an S3 event notification on the bucket to trigger the Lambda function whenever new data is added, and lastly make sure that Lambda can access both S3 and RDS. After I've set the rules for how Lambda should process the data, I will create an RDS database and make sure Lambda can save data to it.
 
 In summary, the whole process starts when I upload data to S3, which then gets processed by Lambda to produce the intended CSV files, and they are finally stored in RDS for future access.
 
@@ -66,8 +76,8 @@ For storing the data, Amazon RDS stood out as the clear choice. The data is stru
 In short, my setup is made to handle the restaurant data in a reliable, scalable, and cost-effective way, showing how using cloud services can make data tasks easier.
 
 ## Architecture diagram:
-![Architecture diagram](architecture_diagram.png)
 
+![Architecture diagram](architecture_diagram.png)
 
 ## Test Script Summary
 
@@ -90,6 +100,7 @@ Before each test, the script sets up some prerequisites, including file paths to
 3. empty_photo_url.json: For the test verifying the behavior with empty photo URLs.
 
 ### **Run the Code**:
+
 ```bash
 python testing.py
 ```
@@ -113,10 +124,13 @@ Upon successful execution of the tests, the following messages will be displayed
 - **Invalid Country Code Test**: "Failed Invalid Country Code Test"
 
 - **Empty Photo URL Test**: "Failed Empty Photo URL Test"
+
 ## **Test Cases:**
+
 #### **1. `test_empty_json`**
 
-- **Purpose**: 
+- **Purpose**:
+
   - This test ensures the system's resilience when encountering an empty JSON dataset.
 
 - **Expected Outcome**:
@@ -126,10 +140,12 @@ Upon successful execution of the tests, the following messages will be displayed
 
 #### **2. `test_invalid_country_code`**
 
-- **Purpose**: 
+- **Purpose**:
+
   - Evaluates how the function handles restaurants with country codes not present in a predefined list or excel sheet.
 
 - **Execution**:
+
   - Restaurant with id 18537536 has a country code of 100, which is not present in the list of valid country codes, is used to test the function's behavior.
   - The `warnings` module captures any warnings thrown during the processing of the dataset.
   - The test asserts that a warning has been issued.
@@ -143,10 +159,12 @@ Upon successful execution of the tests, the following messages will be displayed
 
 #### **3. `test_empty_photo_url`**
 
-- **Purpose**: 
+- **Purpose**:
+
   - Ensures that restaurants with missing photo URLs are handled correctly.
 
 - **Execution**:
+
   - The function processes the dataset.
   - The resultant CSV is read to verify how empty photo URLs have been processed.
 
