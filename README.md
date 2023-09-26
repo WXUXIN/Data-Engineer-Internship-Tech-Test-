@@ -89,17 +89,17 @@ The `testing.py` script evaluates the behavior of `govtech.py` by subjecting it 
 2. **Invalid Country Codes**: Assesses behavior when restaurants have country codes not found in `Country-Code.xlsx`.
 3. **Absent Photo URLs**: Reviews how restaurants with missing photo URLs are processed.
 
-Each test is designed to guarantee that the data processing adapts gracefully to these cases, ensuring data integrity and robust system behavior.
+Each test is designed to test that the data processing adapts gracefully to these cases, ensuring data integrity and robust system behavior.
 
 ### Setup:
 
-Before each test, the script sets up some prerequisites, including file paths to specific JSON files, each containing the first 20 restaurants from the original dataset with the modifications to be tested, except for empty_restaurant_data.json, which is empty. All JSON files are to be in the main directory:
+Before each test, the testing script sets up some prerequisites, including file paths to specific JSON files, each containing the first 20 restaurants from the original dataset with the modifications to be tested, except for empty_restaurant_data.json, which is empty. All JSON files are to be in the main directory:
 
 1. empty_restaurant_data.json: For the test involving an empty JSON.
 2. invalid_country_code.json: For the test checking invalid country codes.
 3. empty_photo_url.json: For the test verifying the behavior with empty photo URLs.
 
-### **Run the Code**:
+### **Run the testing script**:
 
 ```bash
 python testing.py
@@ -142,7 +142,7 @@ Upon successful execution of the tests, the following messages will be displayed
 
 - **Purpose**:
 
-  - Evaluates how the function handles restaurants with country codes not present in a predefined list or excel sheet.
+  - Evaluates how the function handles restaurants with country codes not present in Country-Code.xlsx.
 
 - **Execution**:
 
