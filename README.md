@@ -161,15 +161,15 @@ Upon successful execution of the tests, the following messages will be displayed
 
 - **Purpose**:
 
-  - Ensures that restaurants with missing photo URLs are handled correctly.
+  - Ensures that events of restaurants with missing photo URLs are handled correctly.
 
 - **Execution**:
 
   - The function processes the dataset.
-  - The resultant CSV is read to verify how empty photo URLs have been processed.
+  - The resultant CSV file restaurants.csv is read to verify how empty photo URLs have been processed.
 
 - **Expected Outcome**:
-  - Restaurants with missing photo URLs should be included in the output CSV, demonstrating the function's resilience against incomplete data.
-  - Specifically, there should be 9 such restaurants. This ensures that missing data points aren't simply dropped but are instead filled in with 'NA' and retained.
+  - Events of restaurants with missing photo URLs should be included in the output CSV, demonstrating the function's resilience against incomplete data.
+  - Specifically, there should be 9 such events. This ensures that missing Photo URL aren't simply dropped but are instead filled in with 'NA' and retained.
 
 ---
