@@ -49,9 +49,10 @@ import warnings
 #         "Event Start Date": "string",
 #         "Event End Date": "string"
 # }
+#
 # I will then convert the list of dictionaries to a Pandas DataFrame and explode the Photo URL column so that each row contains only one Photo URL
 #
-# After extracting the data, I will convert the list of dictionaries to a Pandas DataFrame and save it as a CSV file (restaurant_events.csv).
+# After extracting the data, I will save the Dataframe as a CSV file (restaurant_events.csv).
 
 
 
