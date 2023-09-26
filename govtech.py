@@ -14,7 +14,7 @@ import warnings
 # User Aggregate Rating (in float)
 # Cuisines
 #
-# To do so, I will have a list containing dictionaries of restaurants with a structure like this:
+# To do so, I will have a list containing dictionaries of restaurants with a structure like this to represent a single restaurant:
 # {
 #     "Restaurant Id": "string",
 #     "Restaurant Name": "string",
@@ -40,7 +40,7 @@ import warnings
 # Event Start Date
 # Event End Date
 #
-# To do so, I will have a list containing dictionaries of events for each restaurant with a structure like this:
+# To do so, I will have a list containing dictionaries of each events for each restaurant with a structure like this:
 # {
 #         "Restaurant Id": "string",
 #         "Restaurant Name": "string",
@@ -49,14 +49,20 @@ import warnings
 #         "Event Start Date": "string",
 #         "Event End Date": "string"
 # }
+# I will then convert the list of dictionaries to a Pandas DataFrame and explode the Photo URL column so that each row contains only one Photo URL
+#
 # After extracting the data, I will convert the list of dictionaries to a Pandas DataFrame and save it as a CSV file (restaurant_events.csv).
 
 
 
 # For the third task, this is what I would do:
+# Restaurant's event, I want to store:
+# Restaurant Name
+# Rating Text
+# User Aggregate Rating
 #
-# I will extract the list of restaurants and their ratings and store the data as restaurant_ratings.csv.
-# The structure of the dictionary will be:
+# To do so, I will have a list containing dictionaries of each restaurant with a structure like this:
+# 
 # {
 #         "Restaurant Name": "string",
 #         "Rating Text": "string",
@@ -65,14 +71,14 @@ import warnings
 #
 # I will then convert the list of dictionaries to a Pandas DataFrame
 #
-# After extracting the data, I will filter the data to only include restaurants with the following ratings:
+# After extracting the data, I will filter the data to only include restaurants with the following Rating Text:
 # Excellent
 # Very Good
 # Good
 # Average
 # Poor
 #
-# I will drop rows without User Aggregate Rating.
+# I will drop the rows without User Aggregate Rating.
 #
 # I will then group by rating_text and get the minimum and maximum of user_aggregate_rating for each group.
 #
