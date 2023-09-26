@@ -22,6 +22,27 @@ Ensure `restaurant_data.json` and `Country-Code.xlsx` are in the main directory.
 python govtech.py
 ```
 
+Upon successful execution, the following output files will be generated:
+restaurants.csv: A comprehensive list of restaurants.
+restaurant_events.csv: A detailed list of restaurants that hosted events in April 2019.
+
+Additionally, the terminal will display threshold values for the different ratings text:
+min: The lowest aggregate score qualifying for a rating text.
+max: The highest aggregate score that a rating text have.
+
+## Assumptions & Interpretations
+### Assumptions:
+1. An event qualifies as a "Past event in April 2019" if its start date is within April, regardless of the end date.
+2. Event dates will always follow the "YYYY-MM-DD" format.
+3. Zomato's country code remains consistent.
+4. 20 restaurants in the city "Dummy" with Country Code 17 are considered anomalies, but they won't be removed to preserve data completeness.
+
+### Interpretations:
+1. Keys like "results_found” and “results_start" aren't crucial for restaurant data extraction.
+2. The restaurant's ID is represented as `"R": { "res_id": ... }`.
+3. The "zomato_events" key holds a list of dictionaries detailing all events for a given restaurant.
+4. Events can have multiple associated photos. Each photo will be stored in individual rows in the output CSV.
+
 ## Cloud Deployment and Design
 ### **Design & Deployment:**
 
@@ -31,19 +52,11 @@ To set this up, I will first first create an S3 bucket to hold the raw data and 
 
 In summary, the whole process starts when I upload data to S3, which then gets processed by Lambda to produce the intended CSV files, and they are finally stored in RDS for future access.
 
-
-
 ### **Decisions & Considerations:**
 
-I chose AWS Lambda because it works automatically when data is added to S3. This approach is simple, scales as needed, and is cost-effective since you only pay for what you use. For the kind of data we have, Lambda is a good choice.
+I chose AWS Lambda because it works automatically when data is added to S3. This approach is simple, scales as needed, and AWS Lambda is not only cost-effective, ensuring I only pay for the actual compute time I consume, but it's also inherently scalable. As the data grows, Lambda can handle increased loads without any manual intervention. For the type of datasets we're working with, primarily restaurant data that requires periodic, not constant, updates, this serverless model is exceptionally efficient. Lastly, with AWS Lambda's built-in error checks and S3's notifications, I can quickly know if something goes wrong, keeping the data safe.
 
-For storing our data, we picked Amazon RDS because the data is organized and RDS is made for that kind of data. RDS is easy to scale, flexible, and secure. It makes sure the data is saved in a way that's easy to access later. It also has features like automatic backups and strong security.
-
-With AWS Lambda's built-in error checks and S3's notifications, I can quickly know if something goes wrong, keeping our data safe.
-
-Thinking about the future, both Lambda and RDS can handle more work if needed,keeping things running smoothly when there are more data or more requests.
-
-Cost is also an important factor to consider. By using services like Lambda, I only pay for what I actually use, which saves money in the long run.
+For storing our data, Amazon RDS stood out as the clear choice. The data is structured, and I need a reliable database service that could not only store this data but also facilitate easy retrieval. RDS is inherently scalable, ensuring that as the datasets grow, it can effortlessly handle increased storage and access requests. Additionally, RDS is also extremely flexible, whether I need to change our instance type or adjust storage, RDS provides that leeway. Security is paramount, and RDS delivers on this front with robust security features, ensuring our data remains protected. Moreover, RDS's automatic backup and disaster recovery features mean that our data is safeguarded against unforeseen incidents. Given our focus on restaurant data, which requires structured storage and efficient retrieval mechanisms, RDS emerges as the ideal choice.
 
 In short, my setup is made to handle the restaurant data in a reliable, scalable, and cost-effective way, showing how using cloud services can make data tasks easier.
 
