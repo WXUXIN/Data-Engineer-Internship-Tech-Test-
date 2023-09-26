@@ -30,8 +30,10 @@ Upon successful execution, the following output files will be generated:
 All empty values are populated with "NA"
 
 Additionally, the terminal will display threshold values for the different ratings text:
-min: The lowest aggregate score qualifying for a rating text.
-max: The highest aggregate score that a rating text have.
+
+- **min**: The lowest aggregate score qualifying for a rating text.
+
+- **max**: The highest aggregate score that a rating text have.
 
 ## Assumptions & Interpretations
 ### Assumptions:
@@ -57,9 +59,9 @@ In summary, the whole process starts when I upload data to S3, which then gets p
 
 ### **Decisions & Considerations:**
 
-I chose AWS Lambda because it works automatically when data is added to S3. This approach is simple, scales as needed, and AWS Lambda is not only cost-effective, ensuring I only pay for the actual compute time I consume, but it's also inherently scalable. As the data grows, Lambda can handle increased loads without any manual intervention. For the type of datasets we're working with, primarily restaurant data that requires periodic, not constant, updates, this serverless model is exceptionally efficient. Lastly, with AWS Lambda's built-in error checks and S3's notifications, I can quickly know if something goes wrong, keeping the data safe.
+I chose AWS Lambda because it works automatically when data is added to S3. This approach is simple, scales as needed, and AWS Lambda is not only cost-effective, ensuring I only pay for the actual compute time I consume, but it's also inherently scalable. As the data grows, Lambda can handle increased loads without any manual intervention. For the type of datasets I'am working with, primarily restaurant data that requires periodic, not constant, updates, this serverless model is exceptionally efficient. Lastly, with AWS Lambda's built-in error checks and S3's notifications, I can quickly know if something goes wrong, keeping the data safe.
 
-For storing our data, Amazon RDS stood out as the clear choice. The data is structured, and I need a reliable database service that could not only store this data but also facilitate easy retrieval. RDS is inherently scalable, ensuring that as the datasets grow, it can effortlessly handle increased storage and access requests. Additionally, RDS is also extremely flexible, whether I need to change our instance type or adjust storage, RDS provides that leeway. Security is paramount, and RDS delivers on this front with robust security features, ensuring our data remains protected. Moreover, RDS's automatic backup and disaster recovery features mean that our data is safeguarded against unforeseen incidents. Given our focus on restaurant data, which requires structured storage and efficient retrieval mechanisms, RDS emerges as the ideal choice.
+For storing the data, Amazon RDS stood out as the clear choice. The data is structured, and I need a reliable database service that could not only store this data but also facilitate easy retrieval. RDS is inherently scalable, ensuring that as the datasets grow, it can effortlessly handle increased storage and access requests. Additionally, RDS is also extremely flexible, whether I need to change the instance type or adjust storage, RDS provides that leeway. Security is paramount, and RDS delivers on this front with robust security features, ensuring the data remains protected. Moreover, RDS's automatic backup and disaster recovery features mean that the data is safeguarded against unforeseen incidents. Given the focus on restaurant data, which requires structured storage and efficient retrieval mechanisms, RDS emerges as the ideal choice.
 
 In short, my setup is made to handle the restaurant data in a reliable, scalable, and cost-effective way, showing how using cloud services can make data tasks easier.
 
@@ -69,9 +71,9 @@ In short, my setup is made to handle the restaurant data in a reliable, scalable
 
 ## Test Script Summary
 
-The `testing.py` script evaluates the behavior of `govtech.py` by subjecting it to several test cases. The primary objectives include:
+The `testing.py` script evaluates the behavior of `govtech.py` by subjecting it to several test cases.
 
-### Edge Cases Covered:
+### Test Cases Covered:
 
 1. **Empty JSON file**: Determines how the system copes with the absence of data.
 2. **Invalid Country Codes**: Assesses behavior when restaurants have country codes not found in `Country-Code.xlsx`.
