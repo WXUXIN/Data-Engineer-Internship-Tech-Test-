@@ -120,7 +120,7 @@ Upon successful execution of the tests, the following messages will be displayed
   - This test ensures the system's resilience when encountering an empty JSON dataset.
 
 - **Expected Outcome**:
-  - The `process_data` function should raise an exception when given an empty JSON. This is to ensure the function doesn't process invalid or empty datasets, which could lead to unexpected behaviors or errors later on.
+  - The `process_data` function in govtech.py should raise an exception when given an empty JSON. This is to ensure the function doesn't process invalid or empty datasets, which could lead to unexpected behaviors or errors later on.
 
 ---
 
@@ -152,6 +152,6 @@ Upon successful execution of the tests, the following messages will be displayed
 
 - **Expected Outcome**:
   - Restaurants with missing photo URLs should be included in the output CSV, demonstrating the function's resilience against incomplete data.
-  - Specifically, there should be 9 such restaurants. This ensures that missing data points aren't simply dropped but are instead filled in (e.g., with 'NA') and retained.
+  - Specifically, there should be 9 such restaurants. This ensures that missing data points aren't simply dropped but are instead filled in with 'NA' and retained.
 
 ---
