@@ -83,9 +83,9 @@ Each test is designed to guarantee that the data processing adapts gracefully to
 
 Before each test, the script sets up some prerequisites, including file paths to specific JSON files, each containing the first 20 restaurants from the original dataset, except for empty_restaurant_data.json, which is empty.:
 
-1. empty_restaurant_data.json for the test involving an empty JSON.
-2. invalid_country_code.json for the test checking invalid country codes.
-3. empty_photo_url.json for the test verifying the behavior with empty photo URLs.
+1. empty_restaurant_data.json: For the test involving an empty JSON.
+2. invalid_country_code.json: For the test checking invalid country codes.
+3. empty_photo_url.json: For the test verifying the behavior with empty photo URLs.
 
 ### **Run the Code**:
 ```bash
@@ -104,7 +104,7 @@ Upon successful execution of the tests, the following messages will be displayed
 
 - **Empty Photo URL Test**: "Passed Empty Photo URL Test"
 
-#### When a test fails:
+#### Failed Tests:
 
 - **Empty JSON Test**: "Failed Empty JSON Test"
 

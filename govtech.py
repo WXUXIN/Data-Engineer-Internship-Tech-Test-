@@ -3,17 +3,19 @@ import pandas as pd
 import datetime
 import warnings
 
-# I want to store Restaurant Id
-# ◦   	Restaurant Name
-# ◦   	Country
-# ◦   	City
-# ◦   	User Rating Votes
-# ◦   	User Aggregate Rating (in float)
-# ◦   	Cuisines
-
-# I will have a list containing dictionaries of restaurants with a structure like this:
-
-# rest_dict : {
+# For the first task, this is what I would do:
+#
+# For each restaurant, I want to store:
+# Restaurant Id
+# Restaurant Name
+# Country
+# City
+# User Rating Votes
+# User Aggregate Rating (in float)
+# Cuisines
+#
+# To do so, I will have a list containing dictionaries of restaurants with a structure like this:
+# {
 #     "Restaurant Id": "string",
 #     "Restaurant Name": "string",
 #     "Country": "string",
@@ -22,14 +24,61 @@ import warnings
 #     "User Aggregate Rating": "string",
 #     "Cuisines": "string"
 # }
+#
+# After extracting the data, I will convert the list of dictionaries to a Pandas DataFrame and save it as a CSV file (restaurants.csv).
 
-#       Event Id
-# ◦   	Restaurant Id
-# ◦   	Restaurant Name
-# ◦   	Photo URL
-# ◦   	Event Title
-# ◦   	Event Start Date
-# ◦   	Event End Date
+
+
+# For the second task, this is what I would do:
+#
+# For each restaurant's event, I want to store:
+# Event Id
+# Restaurant Id
+# Restaurant Name
+# Photo URL
+# Event Title
+# Event Start Date
+# Event End Date
+#
+# To do so, I will have a list containing dictionaries of events for each restaurant with a structure like this:
+# {
+#         "Restaurant Id": "string",
+#         "Restaurant Name": "string",
+#         "Photo URL": "string",
+#         "Event Title": "string",
+#         "Event Start Date": "string",
+#         "Event End Date": "string"
+# }
+# After extracting the data, I will convert the list of dictionaries to a Pandas DataFrame and save it as a CSV file (restaurant_events.csv).
+
+
+
+# For the third task, this is what I would do:
+#
+# I will extract the list of restaurants and their ratings and store the data as restaurant_ratings.csv.
+# The structure of the dictionary will be:
+# {
+#         "Restaurant Name": "string",
+#         "Rating Text": "string",
+#         "User Aggregate Rating": "float"
+# }
+#
+# I will then convert the list of dictionaries to a Pandas DataFrame
+#
+# After extracting the data, I will filter the data to only include restaurants with the following ratings:
+# Excellent
+# Very Good
+# Good
+# Average
+# Poor
+#
+# I will drop rows without User Aggregate Rating.
+#
+# I will then group by rating_text and get the minimum and maximum of user_aggregate_rating for each group.
+#
+# I will then sort the DataFrame by the minimum user_aggregate_rating in descending order, for easier viewing.
+#
+# Finally I will print out the DataFrame to the console.
 
 def process_data(filename='restaurant_data.json'):
     countries = pd.read_excel('Country-Code.xlsx')
@@ -45,8 +94,7 @@ def process_data(filename='restaurant_data.json'):
     if not main_data:
         raise Exception("JSON file is empty")
     
-    # Think of other exceptions that might occur and raise them here
-
+    
     for outer_dict in main_data:
         
         # Get the list of restaurants using outer_dict['restaurant']
@@ -59,43 +107,21 @@ def process_data(filename='restaurant_data.json'):
             # the month of April 2019 and store the data as restaurant_events.csv.
 
             rest_data = rest_lst[rest]['restaurant']
-            
-            # Initialise dict to store restaurant data
-            rest_dict = {}
-
-            # For Restaurant Id
-            rest_dict['Restaurant Id'] = rest_data.get('R', {}).get('res_id', 'NA')
-
-            # For Restaurant Name
-            rest_dict['Restaurant Name'] = rest_data.get('name', 'NA')
-
-            # For User Rating Votes, User Aggregate Rating
-            rating_data = rest_data.get('user_rating', {})
-            rest_dict['User Rating Votes'] = rating_data.get('votes', 'NA')
-            rest_dict['User Aggregate Rating'] = float(rating_data.get('aggregate_rating', 'NA'))
-
-            # For Country and City
             location_data = rest_data.get('location', {})
-            rest_dict['Country'] = location_data.get('country_id', 'NA')
-            rest_dict['City'] = location_data.get('city', 'NA')
-
-            # For Cuisines
-            rest_dict['Cuisines'] = rest_data.get('cuisines', 'NA')
+            rating_data = rest_data.get('user_rating', {})
+            
+            rest_dict = {
+                "Restaurant Id": rest_data.get('R', {}).get('res_id', 'NA'),
+                "Restaurant Name": rest_data.get('name', 'NA'),
+                "User Rating Votes": rating_data.get('votes', 'NA'),
+                "User Aggregate Rating": float(rating_data.get('aggregate_rating', 'NA')),
+                "Cuisines": rest_data.get('cuisines', 'NA'),
+                "Country": location_data.get('country_id', 'NA'),
+                "City": location_data.get('city', 'NA')
+            }
 
             # Append the restaurant data to the main list
             main_rest_lst.append(rest_dict)
-
-            # Check if there have been events in the past, escpecially in April 2019
-            # If there are, store the data in a dictionary of the form:
-            # {
-            #         "event id": 
-            #         "restaurant_name": "string",
-            #         "photo_url": "string",
-            #         "event_title": "string",
-            #         "event_start_date": "string",
-            #         "event_end_date": "string"
-            # }
-            # Get the list of events using rest_data['events']
 
             zomato_events = rest_data.get('zomato_events', [])
 
@@ -125,12 +151,9 @@ def process_data(filename='restaurant_data.json'):
                     # If there is, extract the url, else, replace it with NA
                     if photo_urls != "NA":
                         photo_urls = [photo["photo"]["url"] if photo.get("photo", {}).get("url", None) else "NA" for photo in event["photos"]]
-                    # [photo["photo"]["url"] for photo in event["photos"]] 
                     
                     event_info = {
                         "Event Id": event["event_id"],
-                        # For demonstration purposes, I've added a placeholder restaurant name,
-                        # but you'll need to extract this from the actual data structure.
                         "Restaurant Id": rest_data.get('R', {}).get('res_id', 'NA'),
                         "Restaurant Name": rest_data.get('name', 'NA'),
                         "Photo URL": photo_urls,
@@ -155,13 +178,11 @@ def process_data(filename='restaurant_data.json'):
     rest_with_event_df = pd.DataFrame(rest_with_event_lst)
     rating_df = pd.DataFrame(rating_list)
 
-
     # Explode the Photo URL column so that each row contains only one URL
     rest_with_event_df_exploded = rest_with_event_df.explode('Photo URL').reset_index(drop=True)
 
     # I want to merge countries witht the DataFrame, using the country_id as the key
     main_df = pd.merge(main_df, countries, how='left', left_on='Country', right_on='Country Code')
-
 
     # If there are restaurants with country code not in the excel sheet provided, and city is not dummy, raise exception
     if main_df[main_df['Country Code'].isna() & (main_df['City'] != 'Dummy')].shape[0] > 0:
