@@ -35,7 +35,7 @@ max: The highest aggregate score that a rating text have.
 
 ## Assumptions & Interpretations
 ### Assumptions:
-1. An event qualifies as a "Past event in April 2019" if its start date is within April, regardless of the end date.
+1. An event qualifies as a "Past event in April 2019" if the even's start date is within April, regardless of the end date.
 2. Event dates will always follow the "YYYY-MM-DD" format.
 3. Zomato's country code remains consistent.
 4. There are 20 restaurants located in the city labeled "Dummy" with the Country Code 17. These entries appear anomalous given that their country code is absent from the valid list in Country-Code.xlsx and the placeholder nature of the city name. Despite their irregularity, these entries will be retained to ensure the integrity and completeness of the dataset.

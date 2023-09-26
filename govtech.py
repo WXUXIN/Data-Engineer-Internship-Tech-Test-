@@ -94,18 +94,15 @@ def process_data(filename='restaurant_data.json'):
     if not main_data:
         raise Exception("JSON file is empty")
     
-    
+
     for outer_dict in main_data:
         
-        # Get the list of restaurants using outer_dict['restaurant']
+        # Get the list of restaurants
         rest_lst = outer_dict['restaurants']
 
         # Loop through the list of restaurants, which themselves are dictionaries
         for rest in range(len(rest_lst)):
             
-            # Extract the list of restaurants that have past event in 
-            # the month of April 2019 and store the data as restaurant_events.csv.
-
             rest_data = rest_lst[rest]['restaurant']
             location_data = rest_data.get('location', {})
             rating_data = rest_data.get('user_rating', {})
@@ -142,13 +139,12 @@ def process_data(filename='restaurant_data.json'):
                 start_date = datetime.datetime.strptime(event["start_date"], "%Y-%m-%d").date()
 
                 # Check if the event was active in April 2019
-                if start_date <= datetime.date(2019, 4, 30) and start_date >= datetime.date(2019, 4, 1):
+                if start_date >= datetime.date(2019, 4, 1) and start_date <= datetime.date(2019, 4, 30):
                     
                     # First check is to check if there are any photos
                     photo_urls = event["photos"] if event["photos"] else "NA"
 
-                    # Second is to check for each photo dictionary, if there is a url key
-                    # If there is, extract the url, else, replace it with NA
+                    # If there are photos urls, get the photo urls, else store NA
                     if photo_urls != "NA":
                         photo_urls = [photo["photo"]["url"] if photo.get("photo", {}).get("url", None) else "NA" for photo in event["photos"]]
                     
@@ -181,14 +177,13 @@ def process_data(filename='restaurant_data.json'):
     # Explode the Photo URL column so that each row contains only one URL
     rest_with_event_df_exploded = rest_with_event_df.explode('Photo URL').reset_index(drop=True)
 
-    # I want to merge countries witht the DataFrame, using the country_id as the key
+    # I want to merge main_df with countries, using the Country and Country Code as the key
     main_df = pd.merge(main_df, countries, how='left', left_on='Country', right_on='Country Code')
 
-    # If there are restaurants with country code not in the excel sheet provided, and city is not dummy, raise exception
+    # If there are restaurants with country code not in the excel sheet provided, and city is not dummy, raise a warning
     if main_df[main_df['Country Code'].isna() & (main_df['City'] != 'Dummy')].shape[0] > 0:
         warnings.warn(f"Invalid country code detected!")
     
-    # main_df = main_df.dropx(['Country_x', 'Country Code'], axis=1)
     # Rename the column to Country
     main_df = main_df.rename(columns={'Country_y': 'Country'})
 
@@ -223,9 +218,9 @@ def process_data(filename='restaurant_data.json'):
     # Sort by the minimum User Aggregate Rating
     grouped = grouped.sort_values(by='min', ascending=False)
 
+    # Print out the DataFrame
     print("\nThreshold for the different rating text: \n")
     print(f"{grouped} \n")
-
     print("Data saved!\n")
 
 if __name__ == "__main__":
